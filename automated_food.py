@@ -3,27 +3,29 @@
 # *** imports *** #
 import time
 import threading
-from gpiozero import * 
+from gpiozero import Button, Servo
 from datetime import datetime
 
 # *** defines *** #
 BUTTON_PIN = int(18)
 MOTOR_PIN = int(25)
 DOOR_DELAY = int(2)
+BREAKFAST = "08:00 AM"
+LUNCH = "12:00 PM"
+DINNER = "06:00 PM"
 
 
-# *** setup *** #
+# *** setup GPIO *** #
 button = Button(BUTTON_PIN)
 servo = Servo(MOTOR_PIN)
 
 
 # *** global variables *** #
-breakfast = "08:00 AM"
-lunch = "12:00 PM"
-dinner = "6:00 PM"
-breakfast_hour = breakfast[0:2]
-lunch_hour = lunch[0:2]
-dinner_hour = dinner[0:2]
+breakfast_hour = BREAKFAST[0:2]
+lunch_hour = LUNCH[0:2]
+dinner_hour = DINNER[0:2]
+
+print("breakfast hour: " + breakfast_hour)
 
 
 # check the time, return True if it is a time that food should be dispensed
@@ -35,7 +37,7 @@ def get_time():
     current_time = current_time.strftime("%H:%M")
 
     # test the time
-    if current_time == breakfast or current_time == lunch or current_time == dinner:
+    if current_time == BREAKFAST or current_time == LUNCH or current_time == DINNER:
         # start interrupt timer for the next get_time() call
         timer = threading.Timer(30, get_time())
         timer.start()        
@@ -53,7 +55,7 @@ def dispense_food():
     # open the food door
     servo.max()
 
-    # how long will the motor will stay open 
+    # how long will the motor will stay open in seconds
     time.sleep(DOOR_DELAY)
 
     # close the food door
