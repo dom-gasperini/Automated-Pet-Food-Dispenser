@@ -25,8 +25,6 @@ breakfast_hour = BREAKFAST[0:2]
 lunch_hour = LUNCH[0:2]
 dinner_hour = DINNER[0:2]
 
-print("breakfast hour: " + breakfast_hour)
-
 
 # check the time, return True if it is a time that food should be dispensed
 def get_time():
