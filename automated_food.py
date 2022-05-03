@@ -7,9 +7,9 @@ from gpiozero import Button, Servo
 from datetime import datetime
 
 # *** defines *** #
-BUTTON_PIN = int(18)
-MOTOR_PIN = int(25)
-DOOR_DELAY = int(2)
+BUTTON_PIN = 3
+MOTOR_PIN = 2
+DOOR_DELAY = 0.25
 BREAKFAST = "08:00 AM"
 LUNCH = "12:00 PM"
 DINNER = "06:00 PM"
@@ -50,14 +50,20 @@ def get_time():
 
 # dispense the food
 def dispense_food():
-    # open the food door
-    servo.max()
+    for i in range(0, 6):
+        # open the food door
+        servo.max()
 
-    # how long will the motor will stay open in seconds
-    time.sleep(DOOR_DELAY)
+        # how long will the motor will stay open in seconds
+        time.sleep(DOOR_DELAY)
 
-    # close the food door
-    servo.mid()
+        # close the food door
+        servo.min()
+
+        time.sleep(DOOR_DELAY)
+    
+    # close the door
+    servo.min()
 
 
 # main
@@ -68,14 +74,15 @@ def main():
         if button.is_active():
             dispense_food()
         
-
         # call get_time() & start the interrupt
         feeding_time = get_time()
 
-
         # dispense food
-        if feeding_time:
-            dispense_food()
+        #if feeding_time:
+        dispense_food()
+
+        # delay
+        time.sleep(10)
 
 
 
