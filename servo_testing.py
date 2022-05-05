@@ -1,8 +1,8 @@
-# the automatic cat food dispenser!
+# servo testing!
 
 # *** imports *** #
 import time
-from gpiozero import Servo, LED
+from gpiozero import Servo
 
 # *** defines *** #
 MOTOR_PIN = 2
@@ -16,12 +16,12 @@ def main():
 	while True:
 		# open door
 		i = 0
-		while i < 6:
+		for i in range(0, 6):
 			servo.min()
 			time.sleep(0.25)
 			servo.max()
 			time.sleep(0.25)
-			i = i + 1
+
 		# close door
 		servo.max()
 		time.sleep(3)

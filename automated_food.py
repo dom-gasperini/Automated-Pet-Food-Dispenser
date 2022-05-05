@@ -24,6 +24,7 @@ servo = Servo(MOTOR_PIN)
 breakfast_hour = BREAKFAST[0:2]
 lunch_hour = LUNCH[0:2]
 dinner_hour = DINNER[0:2]
+feeding_time = False
 
 
 # check the time, return True if it is a time that food should be dispensed
@@ -40,12 +41,14 @@ def get_time():
         timer = threading.Timer(30, get_time())
         timer.start()        
         # return True if it's time for food
-        return True
+        feeding_time = True
+        return
 
     # start interrupt timer for the next get_time() call
     timer = threading.Timer(30, get_time())
     timer.start()
-    return False
+    feeding_time = False
+    return
 
 
 # dispense the food
@@ -60,29 +63,29 @@ def dispense_food():
         # close the food door
         servo.min()
 
+        # delay again
         time.sleep(DOOR_DELAY)
     
-    # close the door
+    # ensure the door is closed
     servo.min()
+    return
 
 
 # main
 def main():
+    # call get_time() & start the interrupt
+    feeding_time = get_time()
+        
     # loop
     while True:
-        # check for button press DEPENDS IF PULLED HIGH OR LOW!!!!!!!!!
+        print("here")
+        # check for button press
         if button.is_active():
             dispense_food()
-        
-        # call get_time() & start the interrupt
-        feeding_time = get_time()
 
         # dispense food
-        #if feeding_time:
-        dispense_food()
-
-        # delay
-        time.sleep(10)
+        if feeding_time:
+            dispense_food()
 
 
 
